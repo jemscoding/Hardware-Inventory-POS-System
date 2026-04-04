@@ -46,32 +46,49 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(string $id)
     {
-        //
+        $category = Category::findOrfail($id);
+        return Inertia::render('category/Show', compact('category'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
+    public function edit(string $id)
     {
-        //
+        $category = Category::findOrfail($id);
+        return Inertia::render('category/Edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, string $id)
     {
-        //
+        $category = Category::findOrfail($id);
+
+        $request->validate([
+            'category_name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $category->update([
+            'category_name' => $request->category_name,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(string $id)
     {
-        //
+        $category = Category::findOrfail($id);
+        $category->delete();
+
+        return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
     }
 }

@@ -1,11 +1,12 @@
+// pages/categories/index.tsx
 import { Card, CardContent } from "@/components/ui/card";
 import { Link, router } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { create } from "@/routes/categories";
+import { create, edit } from "@/routes/categories";
 import { formatDate, formatTime } from "@/components/format-time-and-date";
+import ShowListModal from "@/components/show-list-modal";
 
-// Define the Category interface
 interface Category {
     id: number;
     category_name: string;
@@ -14,7 +15,6 @@ interface Category {
     updated_at: string;
 }
 
-// Define the props for the Category Index component
 interface CategoryProps {
     categories: Category[];
 }
@@ -22,8 +22,9 @@ interface CategoryProps {
 export default function Index({ categories }: CategoryProps) {
     const [showCategories, setShowCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Simulate loading delay for categories
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             setShowCategories(categories);
@@ -33,25 +34,21 @@ export default function Index({ categories }: CategoryProps) {
         return () => clearTimeout(timeoutId);
     }, [categories]);
 
-    // Handle show action - navigate to show page
-    const handleShow = (id: number) => {
-        console.log(`View category with ID: ${id}`);
-        router.visit(`/categories/${id}`);
+    const handleShowModal = (category: Category) => {
+        setSelectedCategory(category);
+        setIsModalOpen(true);
     };
 
-    // Handle edit action - navigate to edit page
     const handleEdit = (id: number) => {
         console.log(`Edit category with ID: ${id}`);
         router.visit(`/categories/${id}/edit`);
     };
 
-    // Handle delete action
     const handleDelete = (id: number) => {
         if (confirm('Are you sure you want to delete this category?')) {
             console.log(`Delete category with ID: ${id}`);
             router.delete(`/categories/${id}`, {
                 onSuccess: () => {
-                    // Optionally show success message or refresh
                     console.log('Category deleted successfully');
                 },
                 onError: (errors) => {
@@ -63,14 +60,14 @@ export default function Index({ categories }: CategoryProps) {
 
     if (loading) {
         return (
-            <div className="container mx-8 py-8">
-                <div className="flex justify-between items-center mb-6">
+            <div className="container py-8">
+                <div className="flex justify-between items-center mx-8">
                     <h1 className="text-3xl font-bold">Category List</h1>
                     <Link href={create()} className="inline-block">
                         <Button>Add Category</Button>
                     </Link>
                 </div>
-                <p>Loading categories...</p>
+                <p className="mx-8 my-4">Loading categories...</p>
             </div>
         );
     }
@@ -89,9 +86,10 @@ export default function Index({ categories }: CategoryProps) {
                     <p className="col-span-full text-center text-gray-500">No categories found.</p>
                 ) : (
                     showCategories.map((category) => (
-                        <Card key={category.id} className="relative">
-                            <CardContent className="py-2">
-                                <div className="space-y-2">
+                        <Card key={category.id} className="relative h-full flex flex-col">
+                            <CardContent className="py-4 flex-1 flex flex-col">
+                                {/* Content section - takes available space */}
+                                <div className="space-y-2 flex-1">
                                     <span className="text-sm text-gray-500">#{category.id}</span>
                                     <h2 className="text-xl font-semibold">Category Name: {category.category_name}</h2>
                                     {!category.description && <p className="text-gray-400 italic">No description available.</p>}
@@ -99,36 +97,49 @@ export default function Index({ categories }: CategoryProps) {
                                     <p className="text-sm text-gray-500">
                                         Created: {formatDate(category.created_at)} {formatTime(category.created_at)}
                                     </p>
+                                </div>
 
-                                    <div className="flex gap-2 mt-4">
-                                        <Button
-                                            onClick={() => handleShow(category.id)}
-                                            variant="secondary"
-                                            size="sm"
-                                        >
-                                            View
-                                        </Button>
-                                        <Button
-                                            onClick={() => handleEdit(category.id)}
-                                            variant="outline"
-                                            size="sm"
-                                        >
+                                {/* Buttons section - sticks to bottom */}
+                                <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                    <ShowListModal 
+                                        trigger={
+                                            <Button variant="outline" size="sm">
+                                                View Details
+                                            </Button>
+                                        }
+                                        title="Category Details"
+                                        description={`Information for category: ${category.category_name}`}
+                                        category={category}
+                                    />
+
+                                    <Link href={edit(category.id)}>
+                                        <Button variant="outline" size="sm">
                                             Edit
                                         </Button>
-                                        <Button
-                                            onClick={() => handleDelete(category.id)}
-                                            variant="destructive"
-                                            size="sm"
-                                        >
-                                            Delete
-                                        </Button>
-                                    </div>
+                                    </Link>
+                                    
+                                    <Button
+                                        onClick={() => handleDelete(category.id)}
+                                        variant="destructive"
+                                        size="sm"
+                                    >
+                                        Delete
+                                    </Button>
                                 </div>
                             </CardContent>
                         </Card>
                     ))
                 )}
             </div>
+
+            {/* Controlled modal approach */}
+            <ShowListModal 
+                trigger={<div style={{ display: 'none' }} />}
+                title="Category Details"
+                category={selectedCategory || undefined}
+                open={isModalOpen}
+                onOpenChange={setIsModalOpen}
+            />
         </div>
     );
 }

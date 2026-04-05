@@ -6,66 +6,52 @@ import { create, edit } from "@/routes/units";
 import { formatDate, formatTime } from "@/components/format-time-and-date";
 import ShowListModal from "@/components/show-list-modal";
 
-interface Product {
+interface Unit {
     id: number;
-    product_name: string;
-    description: string;
-    wholesale_price: number;
-    sale_price: number;
-    stock_quantity: number;
-    is_delivery: 'not-delivery' | 'delivery';
-    category_id: number;  // Foreign key
-    unit_id: number;      // Foreign key
-    category?: {          // Optional relation
-        id: number;
-        category_name: string;
-    };
-    unit?: {              // Optional relation
-        id: number;
-        unit_name: string;
-    };
+    unit_name: string;
+    abbreviation: string;
     created_at: string;
     updated_at: string;
 }
 
-interface ProductProps {
-    products: Product[];
+interface UnitProps {
+    units: Unit[];
 }
 
-export default function Index({ products }: ProductProps) {
-    const [showProducts, setShowProducts] = useState<Product[]>([]);
+export default function Index({ units }: UnitProps) {
+    const [showUnits, setShowUnits] = useState<Unit[]>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            setShowProducts(products);
+            setShowUnits(units);
             setLoading(false);
         }, 1000);
 
         return () => clearTimeout(timeoutId);
-    }, [products]);
+    }, [units]);
 
-    const handleShowModal = (product: Product) => {
-        setSelectedProduct(product);
+    const handleShowModal = (unit: Unit) => {
+        setSelectedUnit(unit);
         setIsModalOpen(true);
     };
 
     const handleEdit = (id: number) => {
-        console.log(`Edit product with ID: ${id}`);
-        router.visit(`/products/${id}/edit`);
+        console.log(`Edit unit with ID: ${id}`);
+        router.visit(`/units/${id}/edit`);
     };
 
     const handleDelete = (id: number) => {
-        if (confirm('Are you sure you want to delete this product?')) {
-            console.log(`Delete product with ID: ${id}`);
-            router.delete(`/products/${id}`, {
+        if (confirm('Are you sure you want to delete this unit?')) {
+            console.log(`Delete unit with ID: ${id}`);
+            router.delete(`/units/${id}`, {
                 onSuccess: () => {
-                    console.log('Product deleted successfully');
+                    console.log('Unit deleted successfully');
                 },
                 onError: (errors) => {
-                    console.error('Error deleting product:', errors);
+                    console.error('Error deleting unit:', errors);
                 }
             });
         }
@@ -75,12 +61,12 @@ export default function Index({ products }: ProductProps) {
         return (
             <div className="container py-8">
                 <div className="flex justify-between items-center mx-8">
-                    <h1 className="text-3xl font-bold">Product List</h1>
+                    <h1 className="text-3xl font-bold">Unit List</h1>
                     <Link href={create()} className="inline-block">
-                        <Button>Add Product</Button>
+                        <Button>Add Unit</Button>
                     </Link>
                 </div>
-                <p className="mx-8 my-4">Loading products...</p>
+                <p className = "mx-8 my-4">Loading units...</p>
             </div>
         );
     }
@@ -88,32 +74,31 @@ export default function Index({ products }: ProductProps) {
     return (
         <div className="container py-8">
             <div className="flex justify-between items-center mb-6 mx-8">
-                <h1 className="text-3xl font-bold">Product List</h1>
+                <h1 className="text-3xl font-bold">Unit List</h1>
                 <Link href={create()} className="inline-block">
-                    <Button>Add Product</Button>
+                    <Button>Add Unit</Button>
                 </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4 mx-8">
-                {showProducts.length === 0 ? (
-                    <p className="col-span-full text-center text-gray-500">No products found.</p>
+                {showUnits.length === 0 ? (
+                    <p className="col-span-full text-center text-gray-500">No units found.</p>
                 ) : (
-                    showProducts.map((product) => (
-                        <Card key={product.id} className="relative">
+                    showUnits.map((unit) => (
+                        <Card key={unit.id} className="relative">
                             <CardContent className="py-2">
                                 <div className="space-y-2">
-                                    <span className="text-sm text-gray-500">#{product.id}</span>
-                                    <h2 className="text-xl font-semibold">Product Name: {product.product_name}</h2>
-                                    <p className="text-gray-600">Description: {product.description}</p>
-                                    <p className="text-lg font-bold">${product.wholesale_price.toFixed(2)}</p>
-                                    <p className="text-lg font-bold">${product.sale_price.toFixed(2)}</p>
+                                    <span className="text-sm text-gray-500">#{unit.id}</span>
+                                    <h2 className="text-xl font-semibold">Unit Name: {unit.unit_name}</h2>
+                                    {!unit.abbreviation && <p className="text-gray-400 italic">No abbreviation available.</p>}
+                                    {unit.abbreviation && <p className="text-gray-600">Abbreviation: {unit.abbreviation}</p>}
                                     <p className="text-sm text-gray-500">
-                                        Created: {formatDate(product.created_at)} {formatTime(product.created_at)}
+                                        Created: {formatDate(unit.created_at)} {formatTime(unit.created_at)}
                                     </p>
 
                                     <div className="flex gap-2 mt-4 mb-auto">
                                         {/* Use modal instead of navigation */}
-                                        {/* <ShowListModal
+                                        <ShowListModal 
                                             trigger={
                                                 <Button variant="outline" size="sm">
                                                     View Details
@@ -122,16 +107,16 @@ export default function Index({ products }: ProductProps) {
                                             title="Unit Details"
                                             description={`Information for unit: ${unit.unit_name}`}
                                             unit={unit}
-                                        /> */}
+                                        />
 
-                                        <Link href={edit(product.id)}>
+                                        <Link href={edit(unit.id)}>
                                             <Button variant="outline" size="sm">
                                                 Edit
                                             </Button>
                                         </Link>
-
+                                        
                                         <Button
-                                            onClick={() => handleDelete(product.id)}
+                                            onClick={() => handleDelete(unit.id)}
                                             variant="destructive"
                                             size="sm"
                                         >
@@ -146,13 +131,13 @@ export default function Index({ products }: ProductProps) {
             </div>
 
             {/* Alternative: Controlled modal approach */}
-            {/* <ShowListModal
+            <ShowListModal 
                 trigger={<div style={{ display: 'none' }} />}
                 title="Category Details"
-                product={selectedProduct || undefined}
+                unit={selectedUnit || undefined}
                 open={isModalOpen}
                 onOpenChange={setIsModalOpen}
-            /> */}
+            />
         </div>
     );
 }

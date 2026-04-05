@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { index } from '@/routes/categories'
 import { formatDate, formatTime } from "@/components/format-time-and-date";
-import { Link, router } from "@inertiajs/react";
+import { Link} from "@inertiajs/react";
 import { Button } from "@/components/ui/button";
 
 interface Category {
@@ -27,9 +28,9 @@ export default function Show({ category }: CategoryProps) {
                     {category.description && <p> Description: {category.description}</p>}
                     <p>Created: {formatDate(category.created_at)} {formatTime(category.created_at)}</p>
 
-                    <Link>
-                        <Button onClick={() => router.visit('/categories')} variant="outline" size="sm" className="mt-4">
-                            Back to List
+                    <Link href = {index()}>
+                        <Button variant="outline" size="sm" className="mt-4">
+                            Back to Categories
                         </Button>
                     </Link>
                 </CardContent>

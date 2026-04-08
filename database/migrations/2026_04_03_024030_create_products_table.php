@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Category;
-use App\Models\Unit;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,16 +13,17 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            // foreign keys for category and unit
-            $table->foreignId(Category::class)->constrained('categories')->cascadeOnDelete();
-            $table->foreignId(Unit::class)->constrained('units')->cascadeOnDelete();
+            
+            // ✅ CORRECT - Specify the column name as string
+            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
+            $table->foreignId('unit_id')->constrained('units')->cascadeOnDelete();
 
             // other product table fields
             $table->string('product_name');
-            $table->string('description')->nullable();
+            $table->text('description')->nullable(); // Changed to text for longer descriptions
             $table->decimal('wholesale_price', 10, 2);
             $table->decimal('sale_price', 10, 2);
-            $table->integer('stock_quantity');
+            $table->integer('stock_quantity')->default(0);
 
             // delivery option: not-delivery or delivery
             $table->enum('is_delivery', ['not-delivery', 'delivery'])->default('not-delivery');

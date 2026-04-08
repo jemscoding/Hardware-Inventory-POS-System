@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(['product_name', 'description', 'wholesale_price', 'sale_price', 'quantity', 'is_delivery', 'category_id', 'unit_id'])]
+#[Fillable(['product_name', 'description', 'wholesale_price', 'sale_price', 'stock_quantity', 'is_delivery', 'category_id', 'unit_id'])]
 class Product extends Model
 {
 

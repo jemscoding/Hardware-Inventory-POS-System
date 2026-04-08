@@ -105,8 +105,8 @@ export default function Index({ products }: ProductProps) {
                                     <span className="text-sm text-gray-500">#{product.id}</span>
                                     <h2 className="text-xl font-semibold">Product Name: {product.product_name}</h2>
                                     <p className="text-gray-600">Description: {product.description}</p>
-                                    <p className="text-lg font-bold">${product.wholesale_price.toFixed(2)}</p>
-                                    <p className="text-lg font-bold">${product.sale_price.toFixed(2)}</p>
+                                    <p className="text-lg font-bold">${product.wholesale_price}</p>
+                                    <p className="text-lg font-bold">${product.sale_price}</p>
                                     <p className="text-sm text-gray-500">
                                         Created: {formatDate(product.created_at)} {formatTime(product.created_at)}
                                     </p>

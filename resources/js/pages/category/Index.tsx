@@ -15,6 +15,7 @@ interface CategoryProps {
 }
 
 export default function Index({ categories }: CategoryProps) {
+    // shows lists of categories
     const [showCategories, setShowCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -78,15 +79,15 @@ export default function Index({ categories }: CategoryProps) {
                 <h1 className="text-3xl font-bold">Category List</h1>
                 <div className="flex gap-2">
                     {/* View mode toggle buttons */}
-                    <Button 
-                        variant={viewMode === 'cards' ? 'default' : 'outline'} 
+                    <Button
+                        variant={viewMode === 'cards' ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => setViewMode('cards')}
                     >
                         Card View
                     </Button>
-                    <Button 
-                        variant={viewMode === 'table' ? 'default' : 'outline'} 
+                    <Button
+                        variant={viewMode === 'table' ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => setViewMode('table')}
                     >
@@ -118,7 +119,7 @@ export default function Index({ categories }: CategoryProps) {
                                     </div>
 
                                     <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                                        <ShowListModal 
+                                        <ShowListModal
                                             trigger={
                                                 <Button variant="outline" size="sm">
                                                     View Details
@@ -134,7 +135,7 @@ export default function Index({ categories }: CategoryProps) {
                                                 Edit
                                             </Button>
                                         </Link>
-                                        
+
                                         <Button
                                             onClick={() => handleDelete(category.id)}
                                             variant="destructive"
@@ -165,12 +166,16 @@ export default function Index({ categories }: CategoryProps) {
             )}
 
             {/* Controlled modal for table view */}
-            <ShowListModal 
+            <ShowListModal
                 trigger={<div style={{ display: 'none' }} />}
                 title="Category Details"
                 category={selectedCategory || undefined}
+                description={selectedCategory ? `Information for category: ${selectedCategory.category_name}` : ''}
                 open={isModalOpen}
-                onOpenChange={setIsModalOpen}
+                onOpenChange={(open) => {
+                    console.log('Modal open state changed to:', open);
+                    setIsModalOpen(open);
+                }}
             />
         </div>
     );

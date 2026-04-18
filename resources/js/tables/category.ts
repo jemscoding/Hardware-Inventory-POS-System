@@ -1,46 +1,28 @@
-// tables/category.ts
+// tables/category.tsx
 import { formatDate, formatTime } from "@/components/format-time-and-date";
 
-export const CategoryTable = () => {
-    return {
-        columns: [
-            {
-                label: 'ID',
-                key: 'id',
-            },
-            {
-                label: 'Category Name',
-                key: 'category_name',
-            },
-            {
-                label: 'Description',
-                key: 'description',
-                render: (value: string) => value || 'No description available'
-            },
-            {
-                label: 'Created At',
-                key: 'created_at',
-                render: (value: string) => `${formatDate(value)} ${formatTime(value)}`
-            },
-            {
-                label: 'Updated At',
-                key: 'updated_at',
-                render: (value: string) => `${formatDate(value)} ${formatTime(value)}`
-            },
-        ],
-        actions: [
-            {
-                label: 'View',
-                icon: 'Eye',
-            },
-            {
-                label: 'Edit',
-                icon: 'Pencil',
-            }, 
-            {
-                label: 'Delete',
-                icon: 'Trash',
-            },
-        ],
-    };
-};
+export function CategoryTable() {
+    const columns = [
+        { key: 'id', label: 'ID' },
+        { key: 'category_name', label: 'Category Name' },
+        { 
+            key: 'description', 
+            label: 'Description',
+            render: (value: string) => value || 'No description'
+        },
+        { 
+            key: 'created_at', 
+            label: 'Created Date',
+            render: (value: string) => formatDate(value)
+        },
+        { 
+            key: 'update_at', 
+            label: 'Updated Time',
+            render: (value: string) => formatTime(value)
+        }
+    ];
+
+    const actions = ['view', 'edit', 'delete'];
+
+    return { columns, actions };
+}

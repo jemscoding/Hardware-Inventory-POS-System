@@ -12,8 +12,8 @@ class ProductController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
-        $products = Product::all();
+    {
+        $products = Product::with('category' , 'unit')->get();
         return Inertia::render('product/Index', compact('products'));
     }
 

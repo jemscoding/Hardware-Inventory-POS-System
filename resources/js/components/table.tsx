@@ -1,4 +1,3 @@
-// components/table.tsx
 import { Eye, Pencil, Trash } from "lucide-react";
 
 interface Column {
@@ -69,7 +68,7 @@ export default function Table({ columns, data, actions, onView, onEdit, onDelete
                                             <button
                                                 key={action.label}
                                                 onClick={() => handleActionClick(action, item)}
-                                                className="text-gray-600 hover:text-gray-900 transition-colors"
+                                                className="text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
                                                 title={action.label}
                                             >
                                                 {action.icon === 'Eye' && <Eye className="w-4 h-4" />}
@@ -81,7 +80,7 @@ export default function Table({ columns, data, actions, onView, onEdit, onDelete
                                 </td>
                             )}
                         </tr>
-                    ))}
+                    ))} 
                 </tbody>
             </table>
         </div>

@@ -66,7 +66,7 @@ export default function Index({ units }: UnitProps) {
                         <Button>Add Unit</Button>
                     </Link>
                 </div>
-                <p className = "mx-8 my-4">Loading units...</p>
+                <p className="mx-8 my-4">Loading units...</p>
             </div>
         );
     }
@@ -80,11 +80,11 @@ export default function Index({ units }: UnitProps) {
                 </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4 mx-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4 mx-8 card-stagger">
                 {showUnits.length === 0 ? (
                     <p className="col-span-full text-center text-gray-500">No units found.</p>
                 ) : (
-                    showUnits.map((unit) => (
+                    showUnits.map((unit, index) => (
                         <Card key={unit.id} className="relative">
                             <CardContent className="py-2">
                                 <div className="space-y-2">
@@ -98,7 +98,7 @@ export default function Index({ units }: UnitProps) {
 
                                     <div className="flex gap-2 mt-4 mb-auto">
                                         {/* Use modal instead of navigation */}
-                                        <ShowListModal 
+                                        <ShowListModal
                                             trigger={
                                                 <Button variant="outline" size="sm">
                                                     View Details
@@ -114,7 +114,7 @@ export default function Index({ units }: UnitProps) {
                                                 Edit
                                             </Button>
                                         </Link>
-                                        
+
                                         <Button
                                             onClick={() => handleDelete(unit.id)}
                                             variant="destructive"
@@ -131,7 +131,7 @@ export default function Index({ units }: UnitProps) {
             </div>
 
             {/* Alternative: Controlled modal approach */}
-            <ShowListModal 
+            <ShowListModal
                 trigger={<div style={{ display: 'none' }} />}
                 title="Category Details"
                 unit={selectedUnit || undefined}

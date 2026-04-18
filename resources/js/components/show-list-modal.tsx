@@ -7,7 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { ReactNode } from "react"
+import { ReactNode, useState } from "react"
 import { formatDate, formatTime } from "@/components/format-time-and-date"
 
 interface ShowListModalProps {
@@ -17,8 +17,8 @@ interface ShowListModalProps {
     category?: Category; 
     unit?: Unit; 
     children?: ReactNode;
-    open?: boolean
-    onOpenChange?: (open: boolean) => void
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
 }
 
 interface Category {
@@ -43,14 +43,24 @@ export default function ShowListModal({
     description,
     category,
     unit,
-    children
+    children,
+    open: controlledOpen,
+    onOpenChange
 }: ShowListModalProps) {
+    // Internal state for uncontrolled mode
+    const [internalOpen, setInternalOpen] = useState(false);
+    
+    // Determine if we're in controlled or uncontrolled mode
+    const isControlled = controlledOpen !== undefined;
+    const isOpen = isControlled ? controlledOpen : internalOpen;
+    const setIsOpen = isControlled ? onOpenChange! : setInternalOpen;
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 {trigger}
             </DialogTrigger>
-            <DialogContent className="max-w-md">
+            <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                     {description && (
@@ -60,29 +70,29 @@ export default function ShowListModal({
                 
                 {category && (
                     <div className="mt-4 space-y-3">
-                        <div>
-                            <label className="font-semibold text-sm text-gray-500 dark:text-white">ID</label>
-                            <p className="text-gray-900 dark:text-white">#{category.id}</p>
+                        <div className="border-b pb-2">
+                            <label className="font-semibold text-sm text-gray-500 dark:text-gray-400 block">ID</label>
+                            <p className="text-gray-900 dark:text-white mt-1">#{category.id}</p>
                         </div>
-                        <div>
-                            <label className="font-semibold text-sm text-gray-500 dark:text-white">Category Name</label>
-                            <p className="text-gray-900 dark:text-white">{category.category_name}</p>
+                        <div className="border-b pb-2">
+                            <label className="font-semibold text-sm text-gray-500 dark:text-gray-400 block">Category Name</label>
+                            <p className="text-gray-900 dark:text-white mt-1 font-medium">{category.category_name}</p>
                         </div>
-                        <div>
-                            <label className="font-semibold text-sm text-gray-500 dark:text-white">Description</label>
-                            <p className="text-gray-900 dark:text-white">
+                        <div className="border-b pb-2">
+                            <label className="font-semibold text-sm text-gray-500 dark:text-gray-400 block">Description</label>
+                            <p className="text-gray-900 dark:text-white mt-1">
                                 {category.description || "No description available"}
                             </p>
                         </div>
-                        <div>   
-                            <label className="font-semibold text-sm text-gray-500 dark:text-white">Created At</label>
-                            <p className="text-gray-900 dark:text-white">
+                        <div className="border-b pb-2">
+                            <label className="font-semibold text-sm text-gray-500 dark:text-gray-400 block">Created At</label>
+                            <p className="text-gray-900 dark:text-white mt-1">
                                 {formatDate(category.created_at)} at {formatTime(category.created_at)}
                             </p>
                         </div>
                         <div>
-                            <label className="font-semibold text-sm text-gray-500 dark:text-white">Last Updated</label>
-                            <p className="text-gray-900 dark:text-white">
+                            <label className="font-semibold text-sm text-gray-500 dark:text-gray-400 block">Last Updated</label>
+                            <p className="text-gray-900 dark:text-white mt-1">
                                 {formatDate(category.updated_at)} at {formatTime(category.updated_at)}
                             </p>
                         </div>
@@ -91,29 +101,29 @@ export default function ShowListModal({
 
                 {unit && (
                     <div className="mt-4 space-y-3">
-                        <div>
-                            <label className="font-semibold text-sm text-gray-500 dark:text-white">ID</label>
-                            <p className="text-gray-900 dark:text-white">#{unit.id}</p>
+                        <div className="border-b pb-2">
+                            <label className="font-semibold text-sm text-gray-500 dark:text-gray-400 block">ID</label>
+                            <p className="text-gray-900 dark:text-white mt-1">#{unit.id}</p>
                         </div>
-                        <div>
-                            <label className="font-semibold text-sm text-gray-500 dark:text-white">Unit Name</label>
-                            <p className="text-gray-900 dark:text-white">{unit.unit_name}</p>
+                        <div className="border-b pb-2">
+                            <label className="font-semibold text-sm text-gray-500 dark:text-gray-400 block">Unit Name</label>
+                            <p className="text-gray-900 dark:text-white mt-1 font-medium">{unit.unit_name}</p>
                         </div>
-                        <div>
-                            <label className="font-semibold text-sm text-gray-500 dark:text-white">Abbreviation</label>
-                            <p className="text-gray-900 dark:text-white">
+                        <div className="border-b pb-2">
+                            <label className="font-semibold text-sm text-gray-500 dark:text-gray-400 block">Abbreviation</label>
+                            <p className="text-gray-900 dark:text-white mt-1">
                                 {unit.abbreviation || "No abbreviation available"}
                             </p>
                         </div>
-                        <div>   
-                            <label className="font-semibold text-sm text-gray-500 dark:text-white">Created At</label>
-                            <p className="text-gray-900 dark:text-white">
+                        <div className="border-b pb-2">
+                            <label className="font-semibold text-sm text-gray-500 dark:text-gray-400 block">Created At</label>
+                            <p className="text-gray-900 dark:text-white mt-1">
                                 {formatDate(unit.created_at)} at {formatTime(unit.created_at)}
                             </p>
                         </div>
                         <div>
-                            <label className="font-semibold text-sm text-gray-500 dark:text-white">Last Updated</label>
-                            <p className="text-gray-900 dark:text-white">
+                            <label className="font-semibold text-sm text-gray-500 dark:text-gray-400 block">Last Updated</label>
+                            <p className="text-gray-900 dark:text-white mt-1">
                                 {formatDate(unit.updated_at)} at {formatTime(unit.updated_at)}
                             </p>
                         </div>

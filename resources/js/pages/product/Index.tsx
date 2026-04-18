@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { create, edit } from "@/routes/units";
 import { formatDate, formatTime } from "@/components/format-time-and-date";
+import  TableList  from "@/components/table-list";
+import { ProductTable } from "@/tables/product";
 import ShowListModal from "@/components/show-list-modal";
 
 interface Product {
@@ -144,6 +146,15 @@ export default function Index({ products }: ProductProps) {
                     ))
                 )}
             </div>
+
+            <TableList
+                columns={ProductTable.columns}
+                actions={ProductTable.actions}
+                data={products}
+                onView={handleShowModal}
+                onEdit={(item) => handleEdit(item.id)}
+                onDelete={(item) => handleDelete(item.id)}
+            />
 
             {/* Alternative: Controlled modal approach */}
             {/* <ShowListModal

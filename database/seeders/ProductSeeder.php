@@ -54,7 +54,6 @@ class ProductSeeder extends Seeder
                 'wholesale_price' => 899.99,
                 'sale_price' => 999.99,
                 'stock_quantity' => 25,
-                'is_delivery' => 'delivery',
             ],
             [
                 'product_name' => 'Samsung Galaxy S23',
@@ -62,7 +61,6 @@ class ProductSeeder extends Seeder
                 'wholesale_price' => 799.99,
                 'sale_price' => 899.99,
                 'stock_quantity' => 30,
-                'is_delivery' => 'delivery',
             ],
             [
                 'product_name' => 'Sony WH-1000XM5',
@@ -70,7 +68,6 @@ class ProductSeeder extends Seeder
                 'wholesale_price' => 299.99,
                 'sale_price' => 349.99,
                 'stock_quantity' => 50,
-                'is_delivery' => 'delivery',
             ],
             [
                 'product_name' => 'Cotton T-Shirt',
@@ -78,7 +75,6 @@ class ProductSeeder extends Seeder
                 'wholesale_price' => 8.00,
                 'sale_price' => 15.99,
                 'stock_quantity' => 200,
-                'is_delivery' => 'delivery',
             ],
             [
                 'product_name' => 'Levi\'s Jeans',
@@ -86,7 +82,6 @@ class ProductSeeder extends Seeder
                 'wholesale_price' => 35.00,
                 'sale_price' => 59.99,
                 'stock_quantity' => 75,
-                'is_delivery' => 'delivery',
             ],
             [
                 'product_name' => 'The Great Gatsby',
@@ -94,7 +89,6 @@ class ProductSeeder extends Seeder
                 'wholesale_price' => 8.00,
                 'sale_price' => 12.99,
                 'stock_quantity' => 100,
-                'is_delivery' => 'delivery',
             ],
             [
                 'product_name' => 'Cooking Pan Set',
@@ -102,7 +96,6 @@ class ProductSeeder extends Seeder
                 'wholesale_price' => 45.00,
                 'sale_price' => 69.99,
                 'stock_quantity' => 40,
-                'is_delivery' => 'delivery',
             ],
             [
                 'product_name' => 'Basketball',
@@ -110,7 +103,6 @@ class ProductSeeder extends Seeder
                 'wholesale_price' => 18.00,
                 'sale_price' => 29.99,
                 'stock_quantity' => 60,
-                'is_delivery' => 'delivery',
             ],
             [
                 'product_name' => 'Motor Oil 5W-30',
@@ -118,7 +110,6 @@ class ProductSeeder extends Seeder
                 'wholesale_price' => 8.00,
                 'sale_price' => 12.99,
                 'stock_quantity' => 150,
-                'is_delivery' => 'not-delivery',
             ],
             [
                 'product_name' => 'Vitamin C Supplement',
@@ -126,7 +117,6 @@ class ProductSeeder extends Seeder
                 'wholesale_price' => 12.00,
                 'sale_price' => 19.99,
                 'stock_quantity' => 120,
-                'is_delivery' => 'delivery',
             ],
         ];
 
@@ -140,7 +130,6 @@ class ProductSeeder extends Seeder
                     'wholesale_price' => $productData['wholesale_price'],
                     'sale_price' => $productData['sale_price'],
                     'stock_quantity' => $productData['stock_quantity'],
-                    'is_delivery' => $productData['is_delivery'],
                     'category_id' => $category->id,
                     'unit_id' => $unit->id,
                 ]);

@@ -3,13 +3,7 @@ import { formatDate, formatTime } from "@/components/format-time-and-date";
 
 export const ProductTable = {
     columns: [
-        { key: 'id', label: 'ID' },
         { key: 'product_name', label: 'Product Name' },
-        {
-            key: 'description',
-            label: 'Description',
-            render: (value: string) => value || 'No description'
-        },
         {
             key: 'wholesale_price',
             label: 'Wholesale Price',
@@ -35,19 +29,9 @@ export const ProductTable = {
             render: (value: any, row: any) => row.category?.category_name || 'No Category'
         },
         {
-            key: 'unit',  // ← Simple key, no dot notation
-            label: 'Unit',
-            render: (value: any, row: any) => row.unit?.unit_name || 'No Unit'
-        },
-        {
             key: 'created_at',
             label: 'Created Date',
             render: (value: string) => formatDate(value)
-        },
-        {
-            key: 'updated_at',  // Fixed: changed from 'update_at' to 'updated_at'
-            label: 'Updated Time',
-            render: (value: string) => formatTime(value)
         }
     ],
 

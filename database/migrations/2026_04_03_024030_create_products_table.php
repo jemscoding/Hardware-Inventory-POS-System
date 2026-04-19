@@ -24,9 +24,7 @@ return new class extends Migration
             $table->decimal('wholesale_price', 10, 2);
             $table->decimal('sale_price', 10, 2);
             $table->integer('stock_quantity')->default(0);
-
-            // delivery option: not-delivery or delivery
-            $table->enum('is_delivery', ['not-delivery', 'delivery'])->default('not-delivery');
+            
             $table->timestamps();
         });
     }

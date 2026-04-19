@@ -2,9 +2,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link, router } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { create, edit } from "@/routes/units";
+import { create, edit } from "@/routes/products";
 import { formatDate, formatTime } from "@/components/format-time-and-date";
-import  TableList  from "@/components/table-list";
+import TableList from "@/components/table-list";
 import { ProductTable } from "@/tables/product";
 import ShowListModal from "@/components/show-list-modal";
 
@@ -96,74 +96,30 @@ export default function Index({ products }: ProductProps) {
                 </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4 mx-8">
-                {showProducts.length === 0 ? (
-                    <p className="col-span-full text-center text-gray-500">No products found.</p>
-                ) : (
-                    showProducts.map((product) => (
-                        <Card key={product.id} className="relative">
-                            <CardContent className="py-2">
-                                <div className="space-y-2">
-                                    <span className="text-sm text-gray-500">#{product.id}</span>
-                                    <h2 className="text-xl font-semibold">Product Name: {product.product_name}</h2>
-                                    <p className="text-gray-600">Description: {product.description}</p>
-                                    <p className="text-lg font-bold">${product.wholesale_price}</p>
-                                    <p className="text-lg font-bold">${product.sale_price}</p>
-                                    <p className="text-sm text-gray-500">
-                                        Created: {formatDate(product.created_at)} {formatTime(product.created_at)}
-                                    </p>
+            <div className="mx-8">
+                    <TableList
+                        columns={ProductTable.columns}
+                        actions={ProductTable.actions}
+                        indexLabel = "#"
+                        indexStartFrom={1}
+                        showIndex = {true}
 
-                                    <div className="flex gap-2 mt-4 mb-auto">
-                                        {/* Use modal instead of navigation */}
-                                        {/* <ShowListModal
-                                            trigger={
-                                                <Button variant="outline" size="sm">
-                                                    View Details
-                                                </Button>
-                                            }
-                                            title="Unit Details"
-                                            description={`Information for unit: ${unit.unit_name}`}
-                                            unit={unit}
-                                        /> */}
+                        data={products}
+                        onView={handleShowModal}
+                        onEdit={(item) => handleEdit(item.id)}
+                        onDelete={(item) => handleDelete(item.id)}
+                        emptyMessage="No Product Found."
+                    />
 
-                                        <Link href={edit(product.id)}>
-                                            <Button variant="outline" size="sm">
-                                                Edit
-                                            </Button>
-                                        </Link>
-
-                                        <Button
-                                            onClick={() => handleDelete(product.id)}
-                                            variant="destructive"
-                                            size="sm"
-                                        >
-                                            Delete
-                                        </Button>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))
-                )}
-            </div>
-
-            <TableList
-                columns={ProductTable.columns}
-                actions={ProductTable.actions}
-                data={products}
-                onView={handleShowModal}
-                onEdit={(item) => handleEdit(item.id)}
-                onDelete={(item) => handleDelete(item.id)}
-            />
-
-            {/* Alternative: Controlled modal approach */}
-            {/* <ShowListModal
+                {/* Alternative: Controlled modal approach */}
+                {/* <ShowListModal
                 trigger={<div style={{ display: 'none' }} />}
                 title="Category Details"
                 product={selectedProduct || undefined}
                 open={isModalOpen}
                 onOpenChange={setIsModalOpen}
             /> */}
+            </div>
         </div>
     );
 }

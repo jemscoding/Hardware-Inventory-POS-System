@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category' , 'unit')->get();
+        $products = Product::with('category', 'unit')->get();
         return Inertia::render('product/Index', compact('products'));
     }
 
@@ -22,7 +24,13 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return Inertia::render('product/Create');
+        $categories = Category::all();
+        $units = Unit::all();
+
+        return Inertia::render('product/Create', [
+            'categories' => $categories,
+            'units' => $units,
+        ]);
     }
 
     /**
@@ -30,7 +38,21 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'product_name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'wholesale_price' => 'required|numeric|min:0',
+            'sale_price' => 'required|numeric|min:0|gt:wholesale_price', // gt = greater than
+            'stock_quantity' => 'required|integer|min:0',
+            'category_id' => 'required|exists:categories,id',
+            'unit_id' => 'required|exists:units,id',
+        ], [
+            'sale_price.gt' => 'The sale price must be greater than the wholesale price.',
+        ]);
+
+        Product::create($request->all());
+
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
     /**
@@ -44,9 +66,16 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit(Product $product) 
     {
-        //
+         $products = Product::findOrFail($product->id);
+        $categories = Category::all();
+        $units = Unit::all();
+         return Inertia::render('product/Edit', [
+            'categories' => $categories,
+            'units' => $units
+
+         ]);
     }
 
     /**
@@ -62,6 +91,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $products = Product::findOrFail($product->id);
+
+        $products->delete();
     }
 }
